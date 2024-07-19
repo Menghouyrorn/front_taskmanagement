@@ -27,7 +27,7 @@
             </div>
           </NuxtLink>
         </div>
-        <Accordion type="single" class="w-full border-none" collapsible>
+        <Accordion type="single" class="w-full border-none" :default-value="defaultValue" collapsible>
           <AccordionItem value="item-1" class="border-none">
             <div class="flex items-center gap-x-3">
               <Icon name="uil:schedule" size="24" />
@@ -96,6 +96,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+const defaultValue = 'item-1'
+
 </script>
 
 <style lang="scss" scoped>

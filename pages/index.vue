@@ -5,7 +5,9 @@
       </div>
       <div class="h-[80%] w-full flex items-center gap-y-14 justify-center flex-col">
         <p class="text-6xl font-bold text-white w-[80%] text-center">You can manage and create your in this website for free.</p>
+       <NuxtLink to="/tasks/create">  
         <Button>Get Start</Button>
+       </NuxtLink>
       </div>
       
   </div>
