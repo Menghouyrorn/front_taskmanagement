@@ -3,14 +3,14 @@
     <h1 class="uppercase text-white font-bold text-2xl">
       Welcome to your folder task : {{ name }}
     </h1>
-    <div class="w-full h-full pt-20 flex justify-center">
-      <Card class="w-full h-[340px] max-w-lg">
+    <div class="w-full h-[85%] pt-20 flex justify-center">
+      <Card class="w-full max-w-lg">
         <CardHeader>
           <CardTitle>Create Task</CardTitle>
           <CardDescription>Create your task here</CardDescription>
         </CardHeader>
         <CardContent>
-          <form class="grid gap-y-5">
+          <form class="grid gap-y-5" @submit="onCreate">
             <FormField v-slot="{ componentField }" name="taskname">
               <FormItem>
                 <FormLabel>Task name</FormLabel>
@@ -25,28 +25,37 @@
               </FormItem>
               <FormMessage />
             </FormField>
-            <Popover>
-              <PopoverTrigger as-child>
-                <Button
-                variant="outline"
-                  :class="
-                    cn(
-                      'w-full justify-start text-left text-black font-normal',
-                      !value && 'text-muted-foreground'
-                    )
-                  "
-                >
-                  <CalendarIcon class="mr-2 h-4 w-4">{{
-                    value
-                      ? df.format(value.toDate(getLocalTimeZone()))
-                      : "Pick a Date"
-                  }}</CalendarIcon>
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent class="w-auto p-0">
-                <Calendar v-model="value" initial-focus />
-              </PopoverContent>
-            </Popover>
+            <FormField v-slot="{ componentField }" name="startdate">
+              <FormItem>
+                <FormLabel>Start Date</FormLabel>
+                <FormControl>
+                  <Input
+                    type="date"
+                    id="startdate"
+                    v-bind="componentField"
+                    placeholder="select Star date"
+                    required
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            </FormField>
+            <FormField v-slot="{ componentField }" name="enddate">
+              <FormItem>
+                <FormLabel>End Date</FormLabel>
+                <FormControl>
+                  <Input
+                    type="date"
+                    placeholder="Select Date"
+                    v-bind="componentField"
+                    id="enddate"
+                    required
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            </FormField>
+            <Button class="w-full" type="submit">Create</Button>
           </form>
         </CardContent>
       </Card>
@@ -55,28 +64,28 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
-import {
-  DateFormatter,
-  type DateValue,
-  getLocalTimeZone,
-} from "@internationalized/date";
-import { Calendar as CalendarIcon } from "lucide-vue-next";
-import { Calendar } from "@/components/ui/calendar";
 import { Button } from "~/components/ui/button";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "~/components/ui/popover";
-import { cn } from "@/lib/utils";
-
-const df = new DateFormatter("en-us", {
-  dateStyle: "long",
-});
-const value = ref<DateValue>();
+import { toTypedSchema } from "@vee-validate/zod";
+import * as z from "zod";
+import { useForm } from "vee-validate";
 
 const route = useRoute();
+
+const checkdata = toTypedSchema(
+  z.object({
+    taskname: z.string(),
+    startdate: z.string(),
+    enddate: z.string(),
+  })
+);
+
+const { handleSubmit } = useForm({
+  validationSchema: checkdata,
+});
+
+const onCreate = handleSubmit((value) => {
+  console.log(value);
+});
 
 const name = route.params.taskcreate;
 </script>

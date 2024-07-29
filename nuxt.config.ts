@@ -7,7 +7,8 @@ export default defineNuxtConfig({
     "@nuxtjs/i18n",
     "shadcn-nuxt",
     '@nuxtjs/color-mode',
-    "@nuxt/icon"
+    "@nuxt/icon",
+    // '@pinia/nuxt'
   ],
   shadcn: {
     /**
@@ -28,4 +29,7 @@ export default defineNuxtConfig({
       exclude: ['vee-validate']
     }
   },
+  // pinia: {
+  //   storesDirs: ['./stores/**'],
+  // },
 })
