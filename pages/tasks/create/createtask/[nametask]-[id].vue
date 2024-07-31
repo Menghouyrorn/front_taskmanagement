@@ -64,12 +64,19 @@
 </template>
 
 <script lang="ts" setup>
+definePageMeta({
+  middleware: "auth",
+});
 import { Button } from "~/components/ui/button";
 import { toTypedSchema } from "@vee-validate/zod";
 import * as z from "zod";
 import { useForm } from "vee-validate";
+import { Post } from "~/services";
 
 const route = useRoute();
+
+const name = route.params.nametask;
+const id = route.params.id;
 
 const checkdata = toTypedSchema(
   z.object({
@@ -83,11 +90,30 @@ const { handleSubmit } = useForm({
   validationSchema: checkdata,
 });
 
+const token = useCookie("token");
+
 const onCreate = handleSubmit((value) => {
+  Post({
+    url: "http://127.0.0.1:8000/api/v1/createtaskcontent",
+    headers: {
+      Authorization: `Bearer ${token.value}`,
+    },
+    data: {
+      task_id: id,
+      title: value.taskname,
+      issuccess: 1,
+      start_on: value.startdate,
+      end_on: value.enddate,
+    },
+  })
+    .then((res) => {
+      navigateTo(`/tasks/${name}-${id}`);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
   console.log(value);
 });
-
-const name = route.params.taskcreate;
 </script>
 
 <style lang="scss" scoped>

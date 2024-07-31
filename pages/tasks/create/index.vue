@@ -1,51 +1,96 @@
 <template>
-    <div class="w-full h-full">
-        <h1 class="uppercase text-2xl font-bold flex items-center gap-x-2 text-white">Welcome <p class="text-[#fac608]">Menghouy</p> to page create folder task</h1>
-        <div class="w-full h-[90%] flex items-center justify-center">
-            <Card class="w-full max-w-xl">
-                <CardHeader>
-                    <CardTitle class="text-xl font-bold">Create Task</CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <form @submit="onCreatetask">
-                        <FormField v-slot="{componentField}" name="tasks">
-                            <FormItem>
-                                <FormLabel>Task Name</FormLabel>
-                                <FormControl>
-                                    <Input type="text" placeholder="Input name task" v-bind="componentField" id="tasks" required/>
-                                </FormControl>
-                            </FormItem>
-                            <FormMessage/>
-                        </FormField>
-                        <Button class="w-full mt-6" type="submit">
-                            Create Task
-                        </Button>
-                    </form>
-                </CardContent>
-            </Card>
-        </div>
+  <div class="w-full h-full">
+    <h1
+      class="uppercase text-2xl font-bold flex items-center gap-x-2 mt-2 text-white"
+    >
+      Welcome
+      <p class="text-[#fac608]">Menghouy</p>
+      to page create folder task
+    </h1>
+    <div class="w-full h-[90%] flex items-center justify-center">
+      <Card class="w-full max-w-xl">
+        <CardHeader>
+          <CardTitle class="text-xl font-bold">Create Task</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form @submit="onCreatetask">
+            <FormField v-slot="{ componentField }" name="tasks">
+              <FormItem>
+                <FormLabel>Task Name</FormLabel>
+                <FormControl>
+                  <Input
+                    type="text"
+                    placeholder="Input name task"
+                    v-bind="componentField"
+                    id="tasks"
+                    required
+                  />
+                </FormControl>
+              </FormItem>
+              <FormMessage />
+            </FormField>
+            <Button class="w-full mt-6" type="submit"> Create Task </Button>
+          </form>
+        </CardContent>
+      </Card>
     </div>
+  </div>
 </template>
 
 <script setup>
-import { toTypedSchema } from '@vee-validate/zod';
-import * as z from 'zod';
-import { useForm } from 'vee-validate';
+import { toTypedSchema } from "@vee-validate/zod";
+import * as z from "zod";
+import { useForm } from "vee-validate";
+import { Get, Post } from "~/services";
 
-const checkData=toTypedSchema(z.object({
-    tasks:z.string().min(3).max(30,{message:'The name of your task should has under 30 character'})
-}));
+const token = useCookie("token");
+definePageMeta({
+  middleware: "auth",
+});
+const checkData = toTypedSchema(
+  z.object({
+    tasks: z.string().min(3).max(30, {
+      message: "The name of your task should has under 30 character",
+    }),
+  })
+);
 
 const form = useForm({
-    validationSchema:checkData,
+  validationSchema: checkData,
 });
-const onCreatetask = form.handleSubmit((value)=>{
-    console.log(value)
+const onCreatetask = form.handleSubmit((value) => {
+  Post({
+    url: "http://127.0.0.1:8000/api/v1/createtask",
+    headers: {
+      Authorization: `Bearer ${token.value}`,
+    },
+    data: {
+      user_id: 1,
+      title: value.tasks,
+    },
+  })
+    .then((res) => {
+      getdata();
+      console.log(res);
+    })
+    .catch((e) => console.log(e));
 });
 
-
+function getdata() {
+  Get({
+    url: "http://127.0.0.1:8000/api/v1/getalltask",
+    headers: {
+      Authorization: `Bearer ${token.value}`,
+    },
+  })
+    .then((data) => {
+      console.log(data.data[0]);
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+}
 </script>
 
 <style lang="scss" scoped>
-
 </style>

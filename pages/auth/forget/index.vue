@@ -1,5 +1,5 @@
 <template>
-    <Card class="w-full max-w-sm">
+    <Card class="w-full max-w-lg pb-16">
       <CardHeader>
         <CardTitle>For get password</CardTitle>
         <CardDescription>Enter the email and new password</CardDescription>
@@ -54,8 +54,8 @@
           <Button type="submit" class="w-full mt-4"> Change Password </Button>
         </form>
         <div class="flex mt-4 gap-x-4">
-          <NuxtLink to="#" class="underline">Alert has account?</NuxtLink>
-          <NuxtLink to="#" class="underline ml-auto"
+          <NuxtLink to="/auth/signin" class="underline">Alert has account?</NuxtLink>
+          <NuxtLink to="/auth/signup" class="underline ml-auto"
             >Don't has account?</NuxtLink
           >
         </div>

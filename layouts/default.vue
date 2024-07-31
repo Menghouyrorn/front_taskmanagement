@@ -10,9 +10,13 @@
               alt=""
             />
           </div>
-          <div>
+          <div v-if="authentication">
             <p class="font-semibold">Do-It</p>
-            <p class="text-[#a18aff]">Menghouy Rorn</p>
+            <p class="text-[#a18aff]">{{ currentUserDat.name }}</p>
+          </div>
+          <div v-else>
+            <p class="font-semibold">Do-It</p>
+            <p class="text-[#a18aff]">username</p>
           </div>
         </div>
         <div
@@ -41,24 +45,35 @@
                   >Task Todays</AccordionTrigger
                 >
               </div>
-              <div class="pl-9 flex gap-y-0 flex-col">
+              <div v-if="datalast" class="pl-9 flex gap-y-0 flex-col">
+                <div v-for="data in datalast" :key="data">
+                  <NuxtLink
+                    :to="/tasks/ + data.title+'-'+data.id "
+                    class="cursor-pointer hover:text-[#fac608]"
+                    ><AccordionContent class="flex items-center gap-x-2">
+                      <div class="h-[8px] w-[8px] bg-[#fac608] rounded-full" />
+                      {{ data.title }}</AccordionContent
+                    ></NuxtLink
+                  >
+                </div>
+
                 <NuxtLink
-                  to="/tasks/personal"
-                  class="cursor-pointer hover:text-[#fac608]"
-                  ><AccordionContent class="flex items-center gap-x-2">
-                    <div class="h-[8px] w-[8px] bg-[#fac608] rounded-full" />
-                    Personal</AccordionContent
+                  to="/tasks/create"
+                  class="cursor-pointer hover:text-[#a18aff]"
+                >
+                  <AccordionContent class="flex items-center gap-x-1">
+                    <div>
+                      <Icon
+                        size="12"
+                        name="material-symbols:add-circle-outline"
+                      />
+                    </div>
+                    Add filter</AccordionContent
                   ></NuxtLink
                 >
-                <NuxtLink
-                  to="/tasks/work"
-                  class="cursor-pointer hover:text-[#fac608]"
-                >
-                  <AccordionContent class="flex items-center gap-x-2">
-                    <div class="h-[8px] w-[8px] bg-[#fac608] rounded-full" />
-                    Work</AccordionContent
-                  ></NuxtLink
-                >
+              </div>
+
+              <div class="pl-9 flex gap-y-0 flex-col" v-else>
                 <NuxtLink
                   to="/tasks/create"
                   class="cursor-pointer hover:text-[#a18aff]"
@@ -77,7 +92,10 @@
             </AccordionItem>
           </Accordion>
           <div>
-            <NuxtLink to="/tasks/scheduletask" class="cursor-pointer hover:text-[#a18aff]">
+            <NuxtLink
+              to="/tasks/scheduletask"
+              class="cursor-pointer hover:text-[#a18aff]"
+            >
               <div class="flex gap-x-3">
                 <Icon name="icon-park-solid:schedule" size="24" />
                 <p class="font-semibold">Schedule task</p>
@@ -85,7 +103,7 @@
             </NuxtLink>
           </div>
           <div class="mt-4">
-            <NuxtLink to="#" class="cursor-pointer hover:text-[#a18aff]">
+            <NuxtLink to="/setting" class="cursor-pointer hover:text-[#a18aff]">
               <div class="flex gap-x-3">
                 <Icon
                   name="material-symbols:settings-account-box-outline-sharp"
@@ -113,7 +131,21 @@ import {
 } from "@/components/ui/accordion";
 const defaultValue = "item-1";
 
-  </script>
+import { storeToRefs } from "pinia";
+import { useAuthStore } from "~/store/auth";
+const { authentication, currentUserDat } = storeToRefs(useAuthStore());
+const token = useCookie("token");
+
+const { data: data } = await useFetch(
+  "http://127.0.0.1:8000/api/v1/getalltask",
+  {
+    headers: {
+      Authorization: `Bearer ${token.value}`,
+    },
+  }
+);
+let datalast = data.value.data;
+</script>
 
 
 

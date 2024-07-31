@@ -32,7 +32,7 @@
                 <div class="flex items-center">
                   <FormLabel> Password </FormLabel>
                   <NuxtLink
-                    to="#"
+                    to="/auth/forget"
                     class="inline-block ml-auto text-sm underline"
                     >for get password</NuxtLink
                   >
@@ -56,7 +56,7 @@
       </form>
       <div class="mt-4 text-center text-sm">
         Don't has an account?
-        <NuxtLink to="#" class="underline">SignUp</NuxtLink>
+        <NuxtLink to="/auth/signup" class="underline">SignUp</NuxtLink>
       </div>
     </CardContent>
   </Card>
@@ -75,6 +75,9 @@ import {
   FormLabel,
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
+import { Post } from "~/services";
+import {storeToRefs} from 'pinia'
+import {useAuthStore} from '~/store/auth'
 
 const checkdata = toTypedSchema(
   z.object({
@@ -90,8 +93,20 @@ const form = useForm({
   validationSchema: checkdata,
 });
 
-const onSumit = form.handleSubmit((value) => {
-  console.log(value);
+const {AuthLoginUser} = useAuthStore();
+const {authentication} = storeToRefs(useAuthStore());
+const router = useRouter();
+
+const onSumit = form.handleSubmit(async (value) => {
+  const userdata = ref({
+    email:value.email,
+    password:value.password,
+  })  
+  await AuthLoginUser(userdata.value);
+
+  if(authentication){
+    router.push('/');
+  }
 });
 
 definePageMeta({
