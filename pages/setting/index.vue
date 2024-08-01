@@ -36,31 +36,6 @@
           />
         </div>
       </NuxtLink>
-      <NuxtLink to="#">
-        <div
-          class="py-3 flex justify-between pl-2 mt-2 hover:bg-gray-200 rounded-sm cursor-pointer transition-all pr-1"
-        >
-          <h1 class="font-semibold text-[#717082]">Privacy</h1>
-          <Icon
-            name="material-symbols-light:arrow-forward-ios"
-            size="24"
-            class="text-[#ca8bfe]"
-          />
-        </div>
-      </NuxtLink>
-      <div
-        class="py-3 w-full pl-1 flex gap-x-2 items-center"
-        style="border-bottom: 2px solid #ca8bfe"
-      >
-        <Icon name="ph:notification-bold" size="30" class="text-[#ca8bfe]" />
-        <h1 class="text-[#ca8bfe] font-bold">Notification</h1>
-      </div>
-      <div
-        class="py-4 flex justify-between items-center hover:bg-gray-200 mt-2 pl-2 transition-all pr-1 cursor-pointer rounded-sm"
-      >
-        <h1 class="text-[#717082] font-semibold">Notifications</h1>
-        <Switch id="airplane-mode" />
-      </div>
       <div
         class="py-4 flex justify-between items-center hover:bg-gray-200 pl-2 mt-2 transition-all cursor-pointer pr-1 rounded-sm"
       >
@@ -68,14 +43,32 @@
         <FormField name="dark_light">
           <FormItem>
             <FormControl>
-              <Switch
-                id="airplane-mode"
-               
-              />
+              <Switch id="airplane-mode" />
             </FormControl>
           </FormItem>
         </FormField>
       </div>
+      <div
+        class="py-3 w-full pl-1 flex gap-x-2 items-center"
+        style="border-bottom: 2px solid #ca8bfe"
+      >
+        <Icon name="ph:notification-bold" size="30" class="text-[#ca8bfe]" />
+        <h1 class="text-[#ca8bfe] font-bold">Tasks</h1>
+      </div>
+      <NuxtLink to="/tasks/managetasks">
+        <div
+          class="py-3 flex justify-between pl-2 mt-2 hover:bg-gray-200 cursor-pointer rounded-sm transition-all pr-1"
+        >
+          <h1 class="font-semibold text-[rgb(113,112,130)]">
+            Manage Tasks
+          </h1>
+          <Icon
+            name="material-symbols-light:arrow-forward-ios"
+            size="24"
+            class="text-[#ca8bfe]"
+          />
+        </div>
+      </NuxtLink>
       <div
         class="py-3 flex w-full pl-1 gap-x-2 items-center"
         style="border-bottom: 2px solid #ca8bfe"
@@ -125,7 +118,6 @@ definePageMeta({
 });
 import { Switch } from "~/components/ui/switch";
 import { useAuthStore } from "~/store/auth";
-
 
 const router = useRouter();
 

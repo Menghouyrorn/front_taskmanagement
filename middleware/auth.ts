@@ -9,12 +9,13 @@ export default defineNuxtRouteMiddleware((to, from) => {
     authentication.value = true;
   }
 
-  if (token.value && to?.name == "/auth/signin") {
-    console.log('home')
+  if (token.value && to?.path == "/auth/signin") {
+    console.log('Hello');
     return navigateTo('/')
+    
   }
 
-  if (!token.value && to?.name !== "/auth/signin") {
+  if (!token.value && to?.path !== "/auth/signin") {
     abortNavigation();
     console.log('login')
     return navigateTo('/auth/signin')

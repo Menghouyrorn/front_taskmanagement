@@ -42,6 +42,10 @@ import { toTypedSchema } from "@vee-validate/zod";
 import * as z from "zod";
 import { useForm } from "vee-validate";
 import { Get, Post } from "~/services";
+import { useAuthStore } from "~/store/auth";
+import { storeToRefs } from "pinia";
+
+const { currentUserDat } = storeToRefs(useAuthStore());
 
 const token = useCookie("token");
 definePageMeta({
@@ -55,6 +59,8 @@ const checkData = toTypedSchema(
   })
 );
 
+const snackbar = useSnackbar();
+
 const form = useForm({
   validationSchema: checkData,
 });
@@ -65,11 +71,16 @@ const onCreatetask = form.handleSubmit((value) => {
       Authorization: `Bearer ${token.value}`,
     },
     data: {
-      user_id: 1,
+      user_id: currentUserDat.value.id,
       title: value.tasks,
     },
   })
     .then((res) => {
+      form.resetField('tasks');
+      snackbar.add({
+        type: "success",
+        text: "This task is create successfully",
+      });
       getdata();
       console.log(res);
     })

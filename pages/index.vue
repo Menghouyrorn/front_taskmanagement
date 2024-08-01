@@ -1,7 +1,7 @@
 <template>
   <div class="w-full h-screen">
     <div class="uppercase text-xl font-bold text-white">
-      Welcome to my website Menghouy
+      Welcome to my website <span class="uppercase text-xl font-bold text-[#fac608]">{{ currentUserDat.name }}</span>
     </div>
     <div
       class="h-[80%] w-full flex items-center gap-y-14 justify-center flex-col"
@@ -19,7 +19,11 @@
 </template>
 
 <script setup>
+import { useAuthStore } from '~/store/auth';
+import { storeToRefs } from 'pinia';
 
+
+const {currentUserDat} = storeToRefs(useAuthStore());
 
 definePageMeta({
   middleware: "auth",

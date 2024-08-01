@@ -10,7 +10,13 @@ export default defineNuxtConfig({
     "shadcn-nuxt",
     "@nuxtjs/color-mode",
     "@nuxt/icon",
+    "nuxt-snackbar"
   ],
+  snackbar: {
+    top: true,
+    right: true,
+    duration: 3000
+  },
   shadcn: {
     /**
      * Prefix for all the imported component

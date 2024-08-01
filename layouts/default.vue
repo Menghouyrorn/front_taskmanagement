@@ -12,7 +12,7 @@
           </div>
           <div v-if="authentication">
             <p class="font-semibold">Do-It</p>
-            <p class="text-[#a18aff]">{{ currentUserDat.name }}</p>
+            <p class="text-[#a18aff]">{{ username }}</p>
           </div>
           <div v-else>
             <p class="font-semibold">Do-It</p>
@@ -47,14 +47,18 @@
               </div>
               <div v-if="datalast" class="pl-9 flex gap-y-0 flex-col">
                 <div v-for="data in datalast" :key="data">
-                  <NuxtLink
-                    :to="/tasks/ + data.title+'-'+data.id "
-                    class="cursor-pointer hover:text-[#fac608]"
-                    ><AccordionContent class="flex items-center gap-x-2">
-                      <div class="h-[8px] w-[8px] bg-[#fac608] rounded-full" />
-                      {{ data.title }}</AccordionContent
-                    ></NuxtLink
-                  >
+                  <div v-if="data.user_id == iduser">
+                    <NuxtLink
+                      :to="/tasks/ + data.title + '-' + data.id"
+                      class="cursor-pointer hover:text-[#fac608]"
+                      ><AccordionContent class="flex items-center gap-x-2">
+                        <div
+                          class="h-[8px] w-[8px] bg-[#fac608] rounded-full"
+                        />
+                        {{ data.title }}</AccordionContent
+                      ></NuxtLink
+                    >
+                  </div>
                 </div>
 
                 <NuxtLink
@@ -129,14 +133,18 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { useTimeoutFn } from "@vueuse/core";
 const defaultValue = "item-1";
 
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "~/store/auth";
 const { authentication, currentUserDat } = storeToRefs(useAuthStore());
+console.log(currentUserDat.value.name);
+const username = currentUserDat.value.name;
+const iduser = currentUserDat.value.id;
 const token = useCookie("token");
 
-const { data: data } = await useFetch(
+const { data: dataGet } = await useFetch(
   "http://127.0.0.1:8000/api/v1/getalltask",
   {
     headers: {
@@ -144,7 +152,9 @@ const { data: data } = await useFetch(
     },
   }
 );
-let datalast = data.value.data;
+
+let datalast = dataGet.value.data;
+
 </script>
 
 

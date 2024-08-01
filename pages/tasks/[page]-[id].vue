@@ -32,29 +32,29 @@
             <p>{{ datafolder.title }}</p>
             <div class="flex gap-x-16 items-center">
               <p>{{ datafolder.end_on }}</p>
-              <div
-                v-if="check"
-                class="flex items-center"
-                @click="check = false"
+              <FormField
+                v-slot="{ valuecheck, handleChange }"
+                name="checkdata"
+                type="checkbox"
               >
-                <Icon
-                  class="text-green-500"
-                  name="material-symbols:check-circle-outline-rounded"
-                  size="22"
-                />
-              </div>
-              <div
-                @click="check = true"
-                v-else
-                class="w-[18px] h-[18px] bg-white rounded-full"
-                style="border: 2px solid #717082"
-              />
+                <FormItem>
+                  <FormControl>
+                    <Checkbox
+                      class="text-green-400"
+                      :checked="valuecheck"
+                      @update:checked="handleChange"
+                    />
+                  </FormControl>
+                </FormItem>
+              </FormField>
             </div>
           </div>
         </div>
       </div>
       <div v-else class="w-full h-[70%] grid items-center justify-center">
-        <h1 class="text-center text-4xl uppercase text-gray-600 font-bold">Not Found</h1>
+        <h1 class="text-center text-4xl uppercase text-gray-600 font-bold">
+          Not Found
+        </h1>
       </div>
     </div>
   </div>
@@ -74,14 +74,14 @@ import { FormItem, FormField, FormControl } from "~/components/ui/form";
 import { useForm } from "vee-validate";
 import * as z from "zod";
 import { toTypedSchema } from "@vee-validate/zod";
+import { Checkbox } from "~/components/ui/checkbox";
 definePageMeta({
   middleware: "auth",
 });
 const token = useCookie("token");
 const route = useRoute();
 
-const check = ref(false);
-let data = ref("");
+
 
 const makeDatacondition = toTypedSchema(
   z.object({
