@@ -92,10 +92,7 @@
   const form = useForm({
     validationSchema: makeDatacondition,
   });
-  
-  const onChangeData = form.handleSubmit((value) => {
-    console.log(value);
-  });
+
   
   let name = route.params.taskname;
   const id = route.params.id;
@@ -111,7 +108,6 @@
   );
   
   const folderdata = getOneFolder.value.data.findtask_content;
-  console.log(folderdata);
   </script>
   
   <style lang="scss" scoped>
